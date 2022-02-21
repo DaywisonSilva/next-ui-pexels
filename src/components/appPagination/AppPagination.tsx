@@ -20,7 +20,8 @@ const AppPagination = ({ darkMode }: AppPaginationProps) => {
         css={{
           position: 'fixed',
           bottom: '20px',
-          left: '$10'
+          maxWidth: '100vw',
+          left: 0
         }}
       >
         <div
