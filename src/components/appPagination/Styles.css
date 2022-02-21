@@ -1,0 +1,14 @@
+.overlay {
+  width: 100vw;
+  height: 100px;
+  position: fixed;
+  bottom: 0;
+}
+
+.overlay--light {
+  background-image: linear-gradient(transparent, white);
+}
+
+.overlay--dark {
+  background-image: linear-gradient(transparent, black);
+}

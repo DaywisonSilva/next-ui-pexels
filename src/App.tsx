@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/header/Header'
+import { NextUIProvider, Pagination } from '@nextui-org/react'
+import { createTheme } from '@nextui-org/react'
+import useDarkMode from 'use-dark-mode'
+import { useState } from 'react'
+import { PaginationContext } from './context'
+import AppPagination from './components/appPagination/AppPagination'
+import Main from './components/main/Main'
 
-function App() {
+const darkTheme = createTheme({
+  type: 'dark'
+})
+
+const lightTheme = createTheme({
+  type: 'light'
+})
+
+const App = () => {
+  const darkMode = useDarkMode(false)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [photos, setPhotos] = useState<Array<Photo>>([])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <NextUIProvider theme={darkMode.value ? darkTheme : lightTheme}>
+        <PaginationContext.Provider
+          value={{
+            currentPage,
+            setCurrentPage: (value) => setCurrentPage(value)
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          <Header
+            darkMode={darkMode.value}
+            setDarkMode={darkMode.toggle}
+            photos={photos}
+            setPhotos={(value) => setPhotos(value)}
+          />
+          <Main photos={photos} />
+          <AppPagination darkMode={darkMode.value} />
+        </PaginationContext.Provider>
+      </NextUIProvider>
+    </>
+  )
 }
 
-export default App;
+export default App
