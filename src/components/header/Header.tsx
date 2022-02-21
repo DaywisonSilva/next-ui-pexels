@@ -1,7 +1,6 @@
 import { Button, Container, Grid, Input, Switch } from '@nextui-org/react'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from '../../api/axios'
-import { PaginationContext } from '../../context'
 import { debounce } from '../../utils'
 import Logo from '../../assets/img/Logo.svg'
 
@@ -27,7 +26,7 @@ const Header = ({ darkMode, setDarkMode, photos, setPhotos }: HeaderProps) => {
       } = await axios.get(`/search?page=1&per_page=10&query=${searchValue}`)
       setPhotos(photos)
     }, 700)
-  }, [searchValue])
+  }, [searchValue, setPhotos])
 
   return (
     <header>
@@ -42,6 +41,7 @@ const Header = ({ darkMode, setDarkMode, photos, setPhotos }: HeaderProps) => {
         >
           <img
             src={Logo}
+            alt='$#'
             style={{
               width: '50px'
             }}

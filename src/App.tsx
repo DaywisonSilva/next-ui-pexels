@@ -1,5 +1,5 @@
 import Header from './components/header/Header'
-import { NextUIProvider, Pagination } from '@nextui-org/react'
+import { NextUIProvider } from '@nextui-org/react'
 import { createTheme } from '@nextui-org/react'
 import useDarkMode from 'use-dark-mode'
 import { useState } from 'react'

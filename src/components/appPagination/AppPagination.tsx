@@ -1,6 +1,6 @@
 import { Container, Pagination } from '@nextui-org/react'
-import { useContext } from 'react'
-import { PaginationContext } from '../../context'
+// import { useContext } from 'react'
+// import { PaginationContext } from '../../context'
 import { useMediaQuery } from '../../hooks'
 import './Styles.css'
 
@@ -10,7 +10,7 @@ interface AppPaginationProps {
 
 const AppPagination = ({ darkMode }: AppPaginationProps) => {
   const screen = useMediaQuery()
-  const AppPaginationContext = useContext(PaginationContext)
+  // const AppPaginationContext = useContext(PaginationContext)
 
   return (
     <>
