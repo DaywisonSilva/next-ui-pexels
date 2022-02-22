@@ -1,5 +1,12 @@
-import { Button, Container, Grid, Input, Switch } from '@nextui-org/react'
-import { useState } from 'react'
+import {
+  Button,
+  Container,
+  Grid,
+  Input,
+  Loading,
+  Switch
+} from '@nextui-org/react'
+import React from 'react'
 import axios from '../../api/axios'
 import { debounce } from '../../utils'
 import Logo from '../../assets/img/Logo.svg'
@@ -7,18 +14,31 @@ import Logo from '../../assets/img/Logo.svg'
 interface HeaderProps {
   darkMode: boolean
   photos: Array<Photo>
+  loading: boolean
+  searchValue: string
+  setSearchValue: (value: string) => void
+  setLoading: (value: boolean) => void
   setPhotos: (value: Array<Photo>) => void
   setDarkMode: () => void
 }
 
-const Header = ({ darkMode, setDarkMode, photos, setPhotos }: HeaderProps) => {
-  const [searchValue, setSearchValue] = useState('')
-
-  const getPhotos = () => {
+const Header = ({
+  darkMode,
+  setDarkMode,
+  photos,
+  loading,
+  searchValue,
+  setSearchValue,
+  setPhotos,
+  setLoading
+}: HeaderProps) => {
+  const getPhotos = (e: React.FormEvent) => {
+    e.preventDefault()
     if (!searchValue) return
 
     debounce(async () => {
       setPhotos([])
+      setLoading(true)
       // const {
       //   data: { photos }
       // }: {
@@ -33,11 +53,13 @@ const Header = ({ darkMode, setDarkMode, photos, setPhotos }: HeaderProps) => {
       } = await axios.get(
         `/search/photos?page=1&per_page=18&query=${searchValue}`
       )
+      console.log(results)
 
       const mappedData = results.map(
         (result: {
           id: string
           alt_description: string
+          description: string
           color: string
           height: number
           width: number
@@ -49,8 +71,21 @@ const Header = ({ darkMode, setDarkMode, photos, setPhotos }: HeaderProps) => {
             small_s3: string
             thumb: string
           }
+          user: {
+            name: string
+            location: string
+            profile_image: {
+              large: string
+              medium: string
+              small: string
+            }
+          }
         }) => {
           return {
+            description: result.description,
+            location: result.user.location,
+            name: result.user.name,
+            // remove desription
             alt: result.alt_description,
             avg_color: result.color,
             height: result.height,
@@ -58,7 +93,7 @@ const Header = ({ darkMode, setDarkMode, photos, setPhotos }: HeaderProps) => {
             liked: false,
             photographer: '',
             photographer_id: 0,
-            photographer_url: '',
+            photographer_url: result.user.profile_image.medium,
             src: {
               landscape: result.urls.raw,
               large: result.urls.full,
@@ -76,6 +111,7 @@ const Header = ({ darkMode, setDarkMode, photos, setPhotos }: HeaderProps) => {
       )
 
       setPhotos(mappedData)
+      setLoading(false)
     }, 700)
   }
 
@@ -97,26 +133,38 @@ const Header = ({ darkMode, setDarkMode, photos, setPhotos }: HeaderProps) => {
               width: '50px'
             }}
           />
-          <Input
-            css={{
+          <form
+            onSubmit={(e) => getPhotos(e)}
+            style={{
               width: 'calc(100% - 150px)'
             }}
-            shadow
-            size='xl'
-            onChange={(e) => setSearchValue(e.target.value)}
-            clearable
-            status='primary'
-            placeholder='search photos...'
-            contentRight={
-              <Button
-                onClick={getPhotos}
-                icon={<span className='material-icons'>search</span>}
-                css={{ padding: 4 }}
-                auto
-                flat
-              />
-            }
-          />
+          >
+            <Input
+              css={{
+                width: '100%'
+              }}
+              shadow
+              aria-label='Search Photos'
+              size='xl'
+              onChange={(e) => setSearchValue(e.target.value)}
+              clearable
+              status='primary'
+              placeholder='search photos...'
+              contentRight={
+                loading ? (
+                  <Loading size='xs' />
+                ) : (
+                  <Button
+                    type='submit'
+                    icon={<span className='material-icons'>search</span>}
+                    css={{ padding: 4 }}
+                    auto
+                    flat
+                  />
+                )
+              }
+            />
+          </form>
           <Switch
             checked={darkMode}
             size='xl'

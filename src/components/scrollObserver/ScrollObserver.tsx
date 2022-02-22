@@ -1,32 +1,44 @@
 import { Container, Loading } from '@nextui-org/react'
-import { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios from '../../api/axios'
 import { debounce } from '../../utils'
-
-interface ScrollControllerProps {
+interface ScrollObserverProps {
+  mainRef: React.RefObject<HTMLElement>
+  searchValue: string
   setPhotos: (value: Array<Photo>) => void
-  photos: Array<Photo>
 }
 
-const ScrollController = ({ photos, setPhotos }: ScrollControllerProps) => {
+const ScrollObserver = ({
+  searchValue,
+  setPhotos,
+  mainRef
+}: ScrollObserverProps) => {
   const [show, setShow] = useState(false)
-  let mainRef = null as unknown as HTMLElement
-  let page = 2
-  const getData = () => {
-    debounce(async () => {
-      setShow(true)
+  const [page, setPage] = useState(2)
 
-      if (mainRef.scrollTop / (page - 1) >= 700) {
+  useEffect(() => {
+    setPage(2)
+  }, [searchValue, mainRef])
+
+  const getData = useCallback(() => {
+    debounce(async () => {
+      setPage(page + 1)
+      setShow(true)
+      console.log(page)
+
+      if ((mainRef.current?.scrollTop || 0) / (page - 1) >= 700) {
+        console.log(mainRef.current?.scrollTop)
         const {
           data: { results }
-        } = await axios.get(`/search/photos?page=${page}&per_page=9&query=cats`)
-
-        page++
+        } = await axios.get(
+          `/search/photos?page=${page}&per_page=9&query=${searchValue}`
+        )
 
         const mappedData = results.map(
           (result: {
             id: string
             alt_description: string
+            description: string
             color: string
             height: number
             width: number
@@ -38,8 +50,21 @@ const ScrollController = ({ photos, setPhotos }: ScrollControllerProps) => {
               small_s3: string
               thumb: string
             }
+            user: {
+              name: string
+              location: string
+              profile_image: {
+                large: string
+                medium: string
+                small: string
+              }
+            }
           }) => {
             return {
+              description: result.description,
+              location: result.user.location,
+              name: result.user.name,
+              // remove desription
               alt: result.alt_description,
               avg_color: result.color,
               height: result.height,
@@ -47,7 +72,7 @@ const ScrollController = ({ photos, setPhotos }: ScrollControllerProps) => {
               liked: false,
               photographer: '',
               photographer_id: 0,
-              photographer_url: '',
+              photographer_url: result.user.profile_image.medium,
               src: {
                 landscape: result.urls.raw,
                 large: result.urls.full,
@@ -68,20 +93,21 @@ const ScrollController = ({ photos, setPhotos }: ScrollControllerProps) => {
       }
       setShow(false)
     }, 200)
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue, page])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    mainRef = document.getElementById('main') as unknown as HTMLElement
-    mainRef.addEventListener('scroll', getData)
+    mainRef.current?.addEventListener('scroll', getData)
 
     return () => {
-      mainRef.removeEventListener('scroll', getData)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      mainRef.current?.removeEventListener('scroll', getData)
     }
-  }, [])
+  }, [getData, mainRef])
 
   return (
     <Container
+      onClick={getData}
       css={{
         position: 'fixed',
         bottom: 20,
@@ -97,4 +123,4 @@ const ScrollController = ({ photos, setPhotos }: ScrollControllerProps) => {
   )
 }
 
-export default ScrollController
+export default ScrollObserver

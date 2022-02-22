@@ -2,6 +2,11 @@ declare module '*.svg'
 declare module '*.css'
 
 type Photo = {
+  // remove description, name and location
+  description?: string
+  name?: string
+  location?: string
+  /**/
   alt?: string
   avg_color?: string
   height?: number
