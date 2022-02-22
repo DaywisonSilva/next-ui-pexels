@@ -1,4 +1,5 @@
 declare module '*.svg'
+declare module '*.css'
 
 type Photo = {
   alt?: string

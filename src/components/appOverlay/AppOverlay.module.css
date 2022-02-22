@@ -6,10 +6,10 @@
   bottom: 0;
 }
 
-.overlay--light {
+.overlayLight {
   background-image: linear-gradient(transparent, white);
 }
 
-.overlay--dark {
+.overlayDark {
   background-image: linear-gradient(transparent, black);
 }

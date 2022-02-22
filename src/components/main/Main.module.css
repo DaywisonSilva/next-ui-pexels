@@ -1,0 +1,62 @@
+.main {
+  position: absolute;
+  top: 102px;
+  width: calc(100% - 40px);
+  margin: 20px 20px 0 20px;
+  height: calc(100vh - 122px);
+  padding: 0 calc(2 * 0.75rem);
+  left: 0;
+  overflow: auto;
+}
+
+.main::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+
+.main::-webkit-scrollbar-track {
+  background: transparent; /* color of the tracking area */
+}
+
+.scrollbarLight::-webkit-scrollbar-thumb {
+  background: linear-gradient(white, #0057d1);
+  border-radius: 20px;
+  border: 3px solid white;
+}
+
+.scrollbarDark::-webkit-scrollbar-thumb {
+  background: linear-gradient(#000, #0057d1);
+  border-radius: 20px;
+  border: 3px solid #000;
+}
+
+.overlay {
+  display: grid;
+  place-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.MasonryGrid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  width: auto;
+}
+
+.MasonryGridColumn {
+  padding-left: 30px; /* gutter size */
+  background-clip: padding-box;
+}
+
+.MasonryGridColumn > div {
+  margin-bottom: 20px;
+}
+
+.onlyScrollController {
+  width: 100%;
+  height: 100px;
+  background-color: transparent;
+}

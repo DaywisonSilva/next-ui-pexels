@@ -4,8 +4,9 @@ import { createTheme } from '@nextui-org/react'
 import useDarkMode from 'use-dark-mode'
 import { useState } from 'react'
 import { PaginationContext } from './context'
-import AppPagination from './components/appPagination/AppPagination'
+import AppOverlay from './components/appOverlay/AppOverlay'
 import Main from './components/main/Main'
+import ScrollController from './components/scrollController/ScrollController'
 
 const darkTheme = createTheme({
   type: 'dark'
@@ -36,7 +37,15 @@ const App = () => {
             setPhotos={(value) => setPhotos(value)}
           />
           <Main photos={photos} />
-          <AppPagination darkMode={darkMode.value} />
+          <AppOverlay darkMode={darkMode.value} />
+          <ScrollController
+            photos={photos}
+            setPhotos={(newValue) =>
+              setPhotos((prevValue) => {
+                return [...prevValue, ...newValue]
+              })
+            }
+          />
         </PaginationContext.Provider>
       </NextUIProvider>
     </>
