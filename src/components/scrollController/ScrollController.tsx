@@ -16,7 +16,7 @@ const ScrollController = ({ photos, setPhotos }: ScrollControllerProps) => {
     debounce(async () => {
       setShow(true)
 
-      if (mainRef.scrollTop / (page - 1) >= 800) {
+      if (mainRef.scrollTop / (page - 1) >= 700) {
         const {
           data: { results }
         } = await axios.get(`/search/photos?page=${page}&per_page=9&query=cats`)
