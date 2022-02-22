@@ -1,5 +1,4 @@
 import { Card, Loading, useTheme } from '@nextui-org/react'
-import { useEffect } from 'react'
 import Masonry from 'react-masonry-css'
 import styles from './Main.module.css'
 
