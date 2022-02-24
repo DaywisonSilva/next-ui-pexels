@@ -1,0 +1,21 @@
+.MasonryGrid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  width: auto;
+}
+
+.MasonryGridColumn {
+  padding: 0 10px; /* gutter size */
+  background-clip: padding-box;
+}
+
+.MasonryGridColumn > div {
+  margin-bottom: 20px;
+}
+
+.onlyScrollController {
+  width: 100%;
+  height: 100px;
+  background-color: transparent;
+}

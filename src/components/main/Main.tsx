@@ -1,6 +1,7 @@
 import { Card, Loading, useTheme } from '@nextui-org/react'
 import { useRef } from 'react'
 import Masonry from 'react-masonry-css'
+import Home from '../home/Home'
 import ScrollObserver from '../scrollObserver/ScrollObserver'
 import styles from './Main.module.css'
 
@@ -8,6 +9,7 @@ interface MainProps {
   searchValue: string
   photos: Array<Photo>
   loading: boolean
+  alreadyRender: boolean
   setModalOpen: (value: boolean) => void
   setCurrentImage: (value: Photo) => void
   setPhotos: (value: Array<Photo>) => void
@@ -17,6 +19,7 @@ const Main = ({
   photos,
   loading,
   searchValue,
+  alreadyRender,
   setModalOpen,
   setCurrentImage,
   setPhotos
@@ -39,28 +42,32 @@ const Main = ({
           : `${styles.main} ${styles.scrollbarLight}`
       }
     >
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className={styles.MasonryGrid}
-        columnClassName={styles.MasonryGridColumn}
-      >
-        {photos.map((photo, index) => {
-          return (
-            <Card clickable cover key={index}>
-              <Card.Image
-                src={photo.src?.medium || ''}
-                alt={photo.alt}
-                width='100%'
-                height='100%'
-                onClick={() => {
-                  setModalOpen(true)
-                  setCurrentImage(photo)
-                }}
-              />
-            </Card>
-          )
-        })}
-      </Masonry>
+      {alreadyRender ? (
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className={styles.MasonryGrid}
+          columnClassName={styles.MasonryGridColumn}
+        >
+          {photos.map((photo, index) => {
+            return (
+              <Card clickable cover key={index}>
+                <Card.Image
+                  src={photo.src?.medium || ''}
+                  alt={photo.alt}
+                  width='100%'
+                  height='100%'
+                  onClick={() => {
+                    setModalOpen(true)
+                    setCurrentImage(photo)
+                  }}
+                />
+              </Card>
+            )
+          })}
+        </Masonry>
+      ) : (
+        <Home />
+      )}
       {loading && (
         <div className={styles.overlay}>
           <Loading size='xl' />

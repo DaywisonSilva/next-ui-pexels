@@ -24,6 +24,7 @@ const App = () => {
   const [currentImage, setCurrentImage] = useState<Photo>({})
   const [modalOpen, setModalOpen] = useState(false)
   const [download, setDownload] = useState(false)
+  const [alreadyRender, setAlreadyRender] = useState(false)
 
   const downloadImage = async () => {
     setDownload(true)
@@ -46,11 +47,13 @@ const App = () => {
           setSearchValue={(value) => setSearchValue(value)}
           setLoading={(value) => setLoading(value)}
           setPhotos={(value) => setPhotos(value)}
+          setAlreadyRender={(value) => setAlreadyRender(value)}
         />
         <Main
           photos={photos}
           loading={loading}
           searchValue={searchValue}
+          alreadyRender={alreadyRender}
           setCurrentImage={(value) => setCurrentImage(value)}
           setModalOpen={(value) => setModalOpen(value)}
           setPhotos={(newValue) =>

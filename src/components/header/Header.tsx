@@ -20,17 +20,19 @@ interface HeaderProps {
   setLoading: (value: boolean) => void
   setPhotos: (value: Array<Photo>) => void
   setDarkMode: () => void
+  setAlreadyRender: (value: boolean) => void
 }
 
 const Header = ({
   darkMode,
-  setDarkMode,
   photos,
   loading,
   searchValue,
+  setDarkMode,
   setSearchValue,
   setPhotos,
-  setLoading
+  setLoading,
+  setAlreadyRender
 }: HeaderProps) => {
   const getPhotos = (e: React.FormEvent) => {
     e.preventDefault()
@@ -53,7 +55,6 @@ const Header = ({
       } = await axios.get(
         `/search/photos?page=1&per_page=18&query=${searchValue}`
       )
-      console.log(results)
 
       const mappedData = results.map(
         (result: {
@@ -110,6 +111,7 @@ const Header = ({
         }
       )
 
+      setAlreadyRender(true)
       setPhotos(mappedData)
       setLoading(false)
     }, 700)
