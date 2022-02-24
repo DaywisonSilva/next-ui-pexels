@@ -21,6 +21,7 @@ const ScrollObserver = ({
   useEffect(() => {
     setPage(2)
     setPhotos([])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue])
 
   const getData = useCallback(() => {
