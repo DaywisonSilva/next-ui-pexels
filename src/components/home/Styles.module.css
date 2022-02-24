@@ -19,3 +19,22 @@
   height: 100px;
   background-color: transparent;
 }
+
+.H1 {
+  text-align: center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 800px;
+  animation: text 2s ease-in-out infinite;
+}
+
+.H1::selection {
+  color: white !important;
+}
+
+@keyframes text {
+  to {
+    background-position-x: 800px;
+  }
+}

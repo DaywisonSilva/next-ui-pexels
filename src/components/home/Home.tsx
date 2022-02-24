@@ -1,6 +1,7 @@
 import { Card, Text } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import Masonry from 'react-masonry-css'
+import useDarkMode from 'use-dark-mode'
 import axios from '../../api/axios'
 import { useMediaQuery } from '../../hooks'
 import styles from './Styles.module.css'
@@ -8,6 +9,8 @@ import styles from './Styles.module.css'
 const Home = () => {
   const { width } = useMediaQuery()
   const [photos, setPhotos] = useState<Array<Photo>>([])
+  const { value } = useDarkMode()
+  const [count, setCount] = useState(1)
   const breakpointColumnsObj = {
     default: 4,
     1100: 4,
@@ -17,11 +20,12 @@ const Home = () => {
 
   useEffect(() => {
     ;(async () => {
+      if (count !== 1) return
+      setCount(2)
       const {
         data: { results }
       } = await axios.get(`/search/photos?page=1&per_page=18&query=cats`)
       //   } = await axios.get('/photos/random?count=10')
-
       const mappedData = results.map(
         (result: {
           id: string
@@ -85,14 +89,14 @@ const Home = () => {
     <>
       <Text
         h1
+        className={styles.H1}
         css={{
           position: 'sticky',
+          backgroundImage: value
+            ? 'linear-gradient( 45deg,pink,rgb(122, 151, 247), rgb(215, 147, 255),rgb(125, 170, 253),pink)'
+            : 'linear-gradient( 45deg,pink,blue, rgb(215, 147, 255),blue,pink)',
           top: '20px',
-          textGradient: `45deg, $blue500 ${
-            width >= 600 ? '-5%' : '10%'
-          }, $pink500 50%`,
-          fontSize: width >= 600 ? '4rem' : '3rem',
-          textAlign: 'center'
+          fontSize: width >= 600 ? '4.5rem' : '3rem'
         }}
       >
         Search For Awesome Photos
