@@ -21,13 +21,11 @@ const ScrollObserver = ({
   useEffect(() => {
     setPage(2)
     setPhotos([])
-  }, [searchValue, mainRef])
+  }, [searchValue])
 
   const getData = useCallback(() => {
     debounce(async () => {
       setShow(true)
-      console.log(mainRef.current?.scrollTop)
-      console.log(page)
 
       if (
         (mainRef.current?.scrollTop || 0) / (page - 1) >=
