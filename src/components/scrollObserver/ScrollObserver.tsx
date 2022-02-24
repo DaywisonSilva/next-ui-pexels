@@ -1,6 +1,7 @@
 import { Container, Loading } from '@nextui-org/react'
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from '../../api/axios'
+import { useMediaQuery } from '../../hooks'
 import { debounce } from '../../utils'
 interface ScrollObserverProps {
   mainRef: React.RefObject<HTMLElement>
@@ -15,23 +16,30 @@ const ScrollObserver = ({
 }: ScrollObserverProps) => {
   const [show, setShow] = useState(false)
   const [page, setPage] = useState(2)
+  const { width } = useMediaQuery()
 
   useEffect(() => {
     setPage(2)
+    setPhotos([])
   }, [searchValue, mainRef])
 
   const getData = useCallback(() => {
     debounce(async () => {
-      setPage(page + 1)
       setShow(true)
+      console.log(mainRef.current?.scrollTop)
       console.log(page)
 
-      if ((mainRef.current?.scrollTop || 0) / (page - 1) >= 700) {
-        console.log(mainRef.current?.scrollTop)
+      if (
+        (mainRef.current?.scrollTop || 0) / (page - 1) >=
+        (width <= 600 ? 800 : 1500)
+      ) {
+        setPage((prevPage) => {
+          return prevPage + 1
+        })
         const {
           data: { results }
         } = await axios.get(
-          `/search/photos?page=${page}&per_page=9&query=${searchValue}`
+          `/search/photos?page=${page}&per_page=18&query=${searchValue}`
         )
 
         const mappedData = results.map(

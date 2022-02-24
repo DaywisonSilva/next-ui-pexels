@@ -35,10 +35,10 @@ const App = () => {
 
   const downloadImage = async () => {
     setDownload(true)
-    const image = await fetch(currentImage.src?.medium || '')
+    const image = await fetch(currentImage.src?.large || '')
     const imgBlob = await image.blob()
     const imgURL = URL.createObjectURL(imgBlob)
-    saveAs(imgURL)
+    saveAs(imgURL, currentImage.id?.toString())
     setDownload(false)
   }
 
@@ -82,10 +82,12 @@ const App = () => {
           <Modal.Body
             css={{
               overflow: 'visible'
-              // padding: '20px'
             }}
           >
-            <Card cover css={{ position: 'relative', margin: 0 }}>
+            <Card
+              cover
+              css={{ position: 'relative', margin: 0, maxHeight: '90vh' }}
+            >
               <Card.Header css={{ position: 'absolute', zIndex: 1, top: 5 }}>
                 <Col>
                   <Text
